@@ -9,12 +9,13 @@ import java.util.List;
  * 음식 배식구는 하나이며, 음식이 있을 경우 손님이 가져갈 수 있다.
  * 음식이 나왔는데 여러명이 하나의 음식을 찢어 갈 수 없다.
  * 운영 시간이 끝나면 결산을 시작한다.*/
-class Restaurant{
+class Restaurant extends Thread{
 				//이름,조리시간,가격
 	List<Foods<String,Integer,Integer>> menu;
 	List<Chef<List<Foods<String,Integer,Integer>>>> chefs;
 	
-	boolean distribution = false; //배식구
+	Foods<String,Integer,Integer> distribution;
+	boolean thereIsDistribution = true; //배식구 ==> 쉐프가 True로 만들고, 손님이 ==False로 만듬.
 	int operTime, limitTime;//운영시간, 식사 제한 시간,
 	int totPrice;//총매출
 	
@@ -39,8 +40,34 @@ class Restaurant{
 		for (Chef<List<Foods<String, Integer, Integer>>> chef : chefs) {
 			chef.start();
 		}
-		
 	}
+	
+	
+	@Override
+	public void run() {
+		int limit = limitTime/1000;
+		int current = 1;
+		
+		while(limit >= current) {
+			try {
+				sleep(1000);
+				System.out.println(current + "운영중");
+				current++;
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		//가게 끝났을 때 아래/
+		
+		System.out.println("가게 문 닫았소. 썩 꺼지시오.");
+	
+	
+	
+	}
+	
+	
 }
 
 
@@ -49,6 +76,16 @@ public class RestaurantThreadMain {
 	public static void main(String[] args) {
 
 		Restaurant rest = new Restaurant(10*60*1000, 2*60*1000);
+		rest.start();
+		
+		try {
+			Thread.sleep(1000);
+			Consumer c1 = new Consumer("최철기", rest);
+			c1.start();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 

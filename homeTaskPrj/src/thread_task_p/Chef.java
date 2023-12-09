@@ -7,6 +7,7 @@ import java.util.List;
 /* 손님이 들어왔을 경우에 주방장이 일을 시작하며,
  * 손님의 인원수당 하나의 음식만 나가야 한다.
  * 주방장은 동시에 여러 음식을 조리할 수 없다.
+ * 조리중은 sleep으로 배식구 사라지기 대기중은 suspend로 표현해볼까?
  * */
 public class Chef<CookableMenu> extends Thread{
 	CookableMenu cookableMenu;
