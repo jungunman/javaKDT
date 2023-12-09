@@ -1,0 +1,17 @@
+package thread_task_p;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Chef<CookableMenu> extends Thread{
+	CookableMenu cookableMenu;
+	List<String> cookedMenu;
+	boolean isCooking;
+	int cookCnt;
+	
+	public Chef(String name, CookableMenu cookableMenu) {
+		super(name);
+		this.cookableMenu = cookableMenu;
+		cookedMenu = new ArrayList<String>();
+	}
+}
