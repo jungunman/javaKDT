@@ -1,0 +1,147 @@
+package thread_task_p;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+
+/*레스토랑은 주방장 3명을 고용하고 있다.
+ * 음식 배식구는 하나이며, 음식이 있을 경우 손님이 가져갈 수 있다.
+ * 음식이 나왔는데 여러명이 하나의 음식을 찢어 갈 수 없다.
+ * 운영 시간이 끝나면 결산을 시작한다.*/
+class Restaurant extends Thread{
+				//이름,조리시간,가격
+	List<Foods<String,Integer,Integer>> menu;
+	List<Chef> chefs;
+	
+	boolean joinConsumer; // 입장함?
+	boolean openStore;
+	Foods<String,Integer,Integer> distribution; // 배식구에 무슨 음식이 올라가 있는지
+	boolean thereIsDistribution = false; //배식구 ==> 쉐프가 True로 만들고, 손님이 ==False로 만듬.
+	int operTime, limitTime;//운영시간, 식사 제한 시간,
+	int totPrice;//총매출
+	int consumerCnt; // 매장에 있는 손님 수;
+	int current = 1;//매장 열고 지난 시간
+	
+	public Restaurant(int operTime, int limitTime) {
+		this.operTime = operTime;
+		this.limitTime = limitTime;
+		openStore = true;
+		
+		//가게 음식 메뉴 셋팅
+		menu = new LinkedList<>();
+		menu.add(new Foods<>("스테이크",5*1000 ,11000));
+		menu.add(new Foods<>("파스타",3*1000 ,7000));
+		menu.add(new Foods<>("피자",7*1000 ,9000));
+		
+		//주방장 고용
+		chefs = new ArrayList<>();
+		chefs.add(new Chef("루카스", this));
+		chefs.add(new Chef("제이슨", this));
+		chefs.add(new Chef("포카드", this));
+		
+		//주방장 출근
+		for (Chef chef : chefs) {
+			chef.start();
+		}
+		
+		chefs.get(0).setPriority(NORM_PRIORITY);
+		chefs.get(1).setPriority(MIN_PRIORITY);
+		chefs.get(2).setPriority( MAX_PRIORITY);
+	}
+	
+	public void joinConsumer() {
+		this.joinConsumer = true;
+		this.consumerCnt += 1;
+	}
+	public void outConsumer() {
+		this.consumerCnt -= 1;
+	}
+	
+	@Override
+	public void run() {
+		int oper = operTime/1000;
+	
+		
+		while(oper >= current) {
+			try {
+				sleep(1000);
+				System.out.println(current + "운영중");
+				current++;
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		//가게 끝났을 때 아래/
+		
+		System.out.println("주문 마감 됐소이다.");
+		openStore = false;
+	
+	
+	}
+	
+	
+}
+
+
+public class RestaurantThreadMain {
+
+	public static void main(String[] args) {
+
+		Restaurant rest = new Restaurant(2*60*1000, 1*60*1000);
+		rest.start();
+		
+		try {
+			Thread.sleep(1000);
+			Consumer c1 = new Consumer("최철기", rest);
+			Consumer c2 = new Consumer("염철진", rest);
+			Consumer c3 = new Consumer("구본좌", rest);
+			Consumer c4 = new Consumer("검두식", rest);
+			Consumer c5 = new Consumer("강해효", rest);
+			c1.start();
+			Thread.sleep(1000);
+			c2.start();
+			Thread.sleep(1000);
+			c3.start();
+			Thread.sleep(1000);
+			c4.start();
+			Thread.sleep(100*1000);
+			c5.start();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+}
+/*
+페밀리 레스토랑을 구현하세요
+
+음식 (조리시간): 
+스테이크(5분) : 11000, 
+파스타(3분)  7000, 
+피자(7분)   9000,
+
+주방장 - 3명
+
+손님 - 5명 : 
+식사 가능 시간 - 2시간
+각 식사시간 10~30분 랜덤
+최대 식사 갯수 : 4개
+식사 후
+손님 각각 결재금액 출력
+
+식당 브레이크 타임
+주방장 및 식당 결산
+배식구는 하나다 , 하나의 배식구에 음식이 있으면 다른 조리된 음식은 올려 둘 수 없고,
+손님이 가져가기 전까지는 음식을 올려둘수 없다.
+손님이 가져가면 배식구에 올려둘 수 있다.
+하나의 음식을 여러 사람들이 동시에 가져갈 수 없으며,
+
+손님은 음식을 먹는 도중에는 다시 음식을 가져갈 수 없다 = > sleep();
+그리고 위의 조건을 만족해야한다.
+
+* */

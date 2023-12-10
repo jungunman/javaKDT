@@ -12,17 +12,21 @@ import java.util.List;
 class Restaurant extends Thread{
 				//이름,조리시간,가격
 	List<Foods<String,Integer,Integer>> menu;
-	List<Chef<List<Foods<String,Integer,Integer>>>> chefs;
+	List<Chef> chefs;
 	
-	Foods<String,Integer,Integer> distribution;
-	boolean thereIsDistribution = true; //배식구 ==> 쉐프가 True로 만들고, 손님이 ==False로 만듬.
+	boolean joinConsumer; // 입장함?
+	boolean openStore;
+	Foods<String,Integer,Integer> distribution; // 배식구에 무슨 음식이 올라가 있는지
+	boolean thereIsDistribution = false; //배식구 ==> 쉐프가 True로 만들고, 손님이 ==False로 만듬.
 	int operTime, limitTime;//운영시간, 식사 제한 시간,
 	int totPrice;//총매출
-	
+	int consumerCnt; // 매장에 있는 손님 수;
+	int current = 1;//매장 열고 지난 시간
 	
 	public Restaurant(int operTime, int limitTime) {
 		this.operTime = operTime;
 		this.limitTime = limitTime;
+		openStore = true;
 		
 		//가게 음식 메뉴 셋팅
 		menu = new LinkedList<>();
@@ -32,26 +36,37 @@ class Restaurant extends Thread{
 		
 		//주방장 고용
 		chefs = new ArrayList<>();
-		chefs.add(new Chef<>("루카스", menu));
-		chefs.add(new Chef<>("제이슨", menu));
-		chefs.add(new Chef<>("포카드", menu));
+		chefs.add(new Chef("루카스", this));
+		chefs.add(new Chef("제이슨", this));
+		chefs.add(new Chef("포카드", this));
 		
 		//주방장 출근
-		for (Chef<List<Foods<String, Integer, Integer>>> chef : chefs) {
+		for (Chef chef : chefs) {
 			chef.start();
 		}
+		
+		chefs.get(0).setPriority(NORM_PRIORITY);
+		chefs.get(1).setPriority(MIN_PRIORITY);
+		chefs.get(2).setPriority( MAX_PRIORITY);
 	}
 	
+	public void joinConsumer() {
+		this.joinConsumer = true;
+		this.consumerCnt += 1;
+	}
+	public void outConsumer() {
+		this.consumerCnt -= 1;
+	}
 	
 	@Override
 	public void run() {
-		int limit = limitTime/1000;
-		int current = 1;
+		int oper = operTime/1000;
+	
 		
-		while(limit >= current) {
+		while(oper >= current) {
 			try {
 				sleep(1000);
-				System.out.println(current + "운영중");
+				System.out.println("레스토랑 "+current + "분 운영중");
 				current++;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -61,8 +76,10 @@ class Restaurant extends Thread{
 		
 		//가게 끝났을 때 아래/
 		
-		System.out.println("가게 문 닫았소. 썩 꺼지시오.");
-	
+		System.out.println("주문 마감 됐소이다.");
+		openStore = false;
+		
+		System.out.println("가게 총 매출 =================>" + totPrice+"원 ");
 	
 	
 	}
@@ -75,13 +92,25 @@ public class RestaurantThreadMain {
 
 	public static void main(String[] args) {
 
-		Restaurant rest = new Restaurant(10*60*1000, 2*60*1000);
+		Restaurant rest = new Restaurant(2*60*1000, 1*60*1000);
 		rest.start();
 		
 		try {
 			Thread.sleep(1000);
 			Consumer c1 = new Consumer("최철기", rest);
+			Consumer c2 = new Consumer("염철진", rest);
+			Consumer c3 = new Consumer("구본좌", rest);
+			Consumer c4 = new Consumer("검두식", rest);
+			Consumer c5 = new Consumer("강해효", rest);
 			c1.start();
+			Thread.sleep(1000);
+			c2.start();
+			Thread.sleep(1000);
+			c3.start();
+			Thread.sleep(1000);
+			c4.start();
+			Thread.sleep(100*1000);
+			c5.start();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

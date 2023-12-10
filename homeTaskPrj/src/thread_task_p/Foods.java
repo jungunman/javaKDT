@@ -10,4 +10,5 @@ public class Foods <Name,Time,Price>{
 		this.cookingTime = cookingTime;
 		this.price = price;
 	}
+	
 }
