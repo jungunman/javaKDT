@@ -1,0 +1,34 @@
+package thread_task_p;
+
+public class AfterJoinLimitTimer extends Thread {
+
+	int limit;
+	int current;
+	
+	
+	
+	
+	
+	public AfterJoinLimitTimer(int limit, int current) {
+		this.limit = limit;
+		this.current = current;
+	}
+
+
+
+
+
+	@Override
+	public void run() {
+		while(limit>current) {
+			current ++;
+			try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+			}
+		}
+	}
+	
+	
+
+}

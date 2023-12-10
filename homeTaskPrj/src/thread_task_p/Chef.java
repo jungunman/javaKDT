@@ -16,94 +16,83 @@ public class Chef extends Thread{
 		cookedMenu = new ArrayList<String>();
 	}
 	
-	//쉐프 전용 음식 올려두기.
-	synchronized public void putFood() {
-		try {
-			cooking();
-			food =  rest.menu.get((int)(Math.random()*3));
-			System.out.println(getName() + "이 음식("+food.foodName+") 만드는 중");
-			sleep(food.cookingTime);
-
-			//음식을 만들었는데 배식구에 음식이 있으면 넣지말고 탈출
-			if(rest.thereIsDistribution = true) {
-				return;
-			}
-			rest.distribution = food;
-			rest.thereIsDistribution =  true; 
-			cookedMenu.add(food.foodName);
-			cookCnt++;
-			
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
+	synchronized void putFood() {
+		if(rest.thereIsDistribution) {
+			System.out.println(getName()+"가 아직도 배식대에 음식이 있어 ( "+food.foodName+" )을 보관합니다.");
+			return;
 		}
-		//여기에 무슨 음식이 올라갈 지 확인==>
+		rest.thereIsDistribution = true; //배식대에 음식을 올려뒀다고 알려두고
+		rest.distribution = food;//배식대에 음식을 올려두고.
+		System.out.println(getName()+"가 들고 들고있던 ( "+rest.distribution.foodName+" )을 배식대에 올립니다.");
+		food = null;//내 음식 삭제
 	}
 	
-	synchronized public void cooking() {
-		System.out.println(getName()+" 요리 시작");
-		rest.joinConsumer = false;
+	
+	synchronized void makeFood() {
+		if(rest.thereIsDistribution) {
+			System.out.println(getName()+"가 배식대에 음식이 있어 음식 만들기를 멈춥니다.");
+			return;
+		}
+		int ranFood = (int)(Math.random()*3);
+		food = rest.menu.get(ranFood);
+		food = new Foods<>(food.foodName, food.cookingTime, food.price);// 깊은 복사
+		
+		food.setProducer(getName());
+		System.out.println(getName()+"가 ( "+food.foodName+" )을 만들기 시작했습니다.");
+		try {
+			sleep(food.cookingTime);//조리중이고.
+			System.out.println(getName()+"가 ( "+food.foodName+" )을 완성!");
+			cookedMenu.add(food.foodName); // 만든 음식 리스트 추가하고.
+			cookCnt++; //음식을 완성했으니 카운트 1 올리고
+			//만들었는데 배식대에 음식이 생기면
+			if(rest.thereIsDistribution) {
+				System.out.println(getName()+"가 배식대에 음식이 있어 ( "+food.foodName+" )을 보관합니다.");
+				return;
+			}
+			System.out.println(getName()+"가 배식대가 비어있어 ( "+food.foodName+" )을 올립니다.");
+			//만들었는데 배식대에 음식이 없다면
+			rest.thereIsDistribution = true; //배식대에 올렸단거 알려줌
+			rest.distribution = food; //배식대에 음식을 올리고
+			food = null; //배식대에 음식을 올렸으니 내껀 삭제
+		} catch (InterruptedException e) {
+		}
+		
+		
 	}
+	
 	
 	@Override
 	public void run() {
-		int oper = rest.operTime/1000;
+		int start = (int)(Math.random()*1000+500); 
 		
-		
-		System.out.println(getName()+ " 출근 했습니다.");
+		try {
+			sleep(start);
+			System.out.println(getName()+ " 출근 했습니다.");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//가게 문 닫을 때까지 강제 노동
-		while(oper >= rest.current) {
-			//동시에 음식을 만들지 않게 만들기 Sync로 안되서 만들어 봄;
+		while(rest.operTime >= rest.current) {
 			int ranSleep = (int)(Math.random()*500+500); 
-			if(rest.joinConsumer) {
-				if(!rest.thereIsDistribution) {
-					try {
+			try {
+				if(!rest.thereIsDistribution) {// 음식이 없다면
+					sleep(ranSleep);
+					if(rest.joinConsumer) {//고객이 요청했다면
 						sleep(ranSleep);
-						//내가 조리한 음식이 있으면 그거 배식구에 넣고 다시 판단해
-						if(this.food != null) {
-							rest.distribution = food;
-							rest.thereIsDistribution =  true; 
-							cookedMenu.add(food.foodName);
-							cookCnt++;
-							this.food = null;
-							continue;
+						if(food != null) { //내가 음식을 가지고 있다면.
+							putFood();//내가 만든 음식을 배식대에 올리는 메소드로
+						}else {//내가 음식을 가지고 있지 않다면
+							makeFood(); // 음식 만드는 메소드로
 						}
-						//조리 시작한다.
-						sleep(ranSleep);
-						putFood();
-						sleep(ranSleep);
-
-						if(rest.distribution != null) {
-							System.out.println("배식구의 ( "+getName()+"꺼 )음식 : "+rest.distribution.foodName);
-						}
-					} catch (InterruptedException e) {
-					}
-				}else {
-					try {
-						sleep(1000);
-						if(this.food != null) {							
-							System.out.println(getName()+" 배식구에 음식이 있어서 "+food.foodName+" 들고 대기중 ");
-						}else {
-							System.out.println(getName()+" 배식구에 음식이 있어서 대기중 ");
-						}
-					} catch (InterruptedException e) {
 					}
 				}
-			}else {
-				try {
-					sleep(1000);
-					System.out.println(getName()+": 대기중");
-				} catch (InterruptedException e) {
-				}
+			}catch (InterruptedException e) {
+				
 			}
+			
 		}
 		
-		//퇴근이 되었을 때!
-		System.out.println("\n\n■□■□■□ 요리사 ■□■□■□");
-		System.out.println(getName()+"이 만들었던 음식 총("+cookCnt+"개) ====>");
-		for (String menu : cookedMenu) {
-			System.out.println(menu);
-		}
 	}
 	
 	

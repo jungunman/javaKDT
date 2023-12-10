@@ -60,10 +60,10 @@ class Restaurant extends Thread{
 	
 	@Override
 	public void run() {
-		int oper = operTime/1000;
+		
 	
 		
-		while(oper >= current) {
+		while(operTime >= current) {
 			try {
 				sleep(1000);
 				System.out.println("레스토랑 "+current + "분 운영중");
@@ -80,7 +80,15 @@ class Restaurant extends Thread{
 		openStore = false;
 		
 		System.out.println("가게 총 매출 =================>" + totPrice+"원 ");
-	
+		//퇴근이 되었을 때!
+		for (Chef chef : chefs) {
+			System.out.println("\n\n■□■□■□ 요리사 ■□■□■□");
+			System.out.println(chef.getName()+"이 만들었던 음식 총("+chef.cookCnt+"개) ====>");
+			for (String menu : chef.cookedMenu) {
+				System.out.println(menu);
+			}
+		
+		}
 	
 	}
 	
@@ -92,7 +100,7 @@ public class RestaurantThreadMain {
 
 	public static void main(String[] args) {
 
-		Restaurant rest = new Restaurant(2*60*1000, 1*60*1000);
+		Restaurant rest = new Restaurant(120, 60);
 		rest.start();
 		
 		try {

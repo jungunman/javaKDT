@@ -1,0 +1,89 @@
+package thread_task_p;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Consumer extends Thread{
+	Restaurant  visited;
+	Foods<String,Integer,Integer> eatting;
+	List<String> eatted;
+	String name;
+	int limitTime;
+	int eatTime;//밥먹는 시간;
+	int eatCnt;
+	int pay;
+	
+	public Consumer(String name ,Restaurant restaurant) {
+		super(name);
+		this.visited = restaurant;
+		this.name = name;
+		this.limitTime = visited.limitTime;
+		eatted = new ArrayList<>();
+	}
+	
+	synchronized public void takeAFood() {
+		//최대 20분  // 기본 10분
+		eatTime = (int)(Math.random()*(20*1000)+(10*1000));
+		eatting = visited.distribution;
+
+		visited.distribution = null;
+		visited.thereIsDistribution = false;
+	}
+	
+	synchronized public void wantCook() {
+		visited.joinConsumer = true;
+		System.out.println(getName()+" : 배식구에 음식이 없네요.");
+	}
+	
+	@Override
+	public void run() {
+		AfterJoinLimitTimer ajlt = new AfterJoinLimitTimer(visited.limitTime/1000, 1);
+		System.out.println(getName() + " 입장했습니다." );
+		visited.joinConsumer();
+		ajlt.start();
+		while(visited.limitTime/1000 >= ajlt.current && visited.openStore) {
+			//동시에 음식을 만들지 않게 만들기 Sync로 안되서 만들어 봄;
+			System.out.println(getName()+" 입장 한 지 "+ajlt.current);
+			int ranSleep = (int)(Math.random()*500+500); 
+			try {
+				if(eatCnt >= 4) {
+					break;
+				}
+				if (!visited.thereIsDistribution) { //배식구에 음식이 없다면
+					sleep(ranSleep);
+					wantCook();
+				}else {
+					//식사중
+					sleep(ranSleep);
+					takeAFood();
+					if(this.eatting == null) {
+						continue;
+					}
+					System.out.println(getName()+"이 식사("+eatting.foodName+" - "+eatting.producer+") 시작 ("+eatTime/1000+"분 후 식사 종료)");
+					eatted.add(eatting.foodName);
+					eatCnt ++;
+					sleep(eatTime); //식사중
+					System.out.println(getName()+"이 식사("+eatting.foodName+" - "+eatting.producer+") 완료");
+					visited.joinConsumer = true; // 음식 다먹으면 다시 대기열에 합류
+					visited.totPrice += eatting.price;
+					pay += eatting.price;
+					eatTime = 0;
+				}
+				
+			}catch(InterruptedException e) {
+				e.getStackTrace();
+			}
+		}
+		//식사가 끝나면 아래
+		
+		visited.outConsumer();
+		System.out.println("\n♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥");
+		System.out.println(getName()+"이 먹었던 음식 들======>"+eatted);
+		System.out.println(getName()+"이 지불한 돈======>"+pay);
+		System.out.println("♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥\n");
+		
+		
+	
+	}
+	
+}

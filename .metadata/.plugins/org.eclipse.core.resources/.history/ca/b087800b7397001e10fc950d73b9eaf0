@@ -1,0 +1,20 @@
+package thread_task_p;
+
+public class Foods <Name,Time,Price>{
+	Time cookingTime;
+	Name foodName;
+	Price price;
+	String producer;
+	public Foods(Name name, Time cookingTime, Price price) {
+		this.foodName = name;
+		this.cookingTime = cookingTime;
+		this.price = price;
+	}
+	
+	
+	
+	public void setProducer(String producer) {
+		this.producer = producer;
+	}
+	
+}

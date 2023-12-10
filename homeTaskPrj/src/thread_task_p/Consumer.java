@@ -8,7 +8,6 @@ public class Consumer extends Thread{
 	Foods<String,Integer,Integer> eatting;
 	List<String> eatted;
 	String name;
-	int limitTime;
 	int eatTime;//밥먹는 시간;
 	int eatCnt;
 	int pay;
@@ -17,7 +16,6 @@ public class Consumer extends Thread{
 		super(name);
 		this.visited = restaurant;
 		this.name = name;
-		this.limitTime = visited.limitTime;
 		eatted = new ArrayList<>();
 	}
 	
@@ -37,15 +35,13 @@ public class Consumer extends Thread{
 	
 	@Override
 	public void run() {
-		int joinTime = 1;
-		int limitTime = visited.limitTime/1000;
-		
+		AfterJoinLimitTimer ajlt = new AfterJoinLimitTimer(visited.limitTime, 1);
 		System.out.println(getName() + " 입장했습니다." );
 		visited.joinConsumer();
-		while(limitTime >= joinTime && visited.openStore) {
+		ajlt.start();
+		while(visited.limitTime >= ajlt.current && visited.openStore) {
 			//동시에 음식을 만들지 않게 만들기 Sync로 안되서 만들어 봄;
 			int ranSleep = (int)(Math.random()*500+500); 
-			joinTime++;
 			try {
 				if(eatCnt >= 4) {
 					break;
@@ -60,11 +56,11 @@ public class Consumer extends Thread{
 					if(this.eatting == null) {
 						continue;
 					}
-					System.out.println(getName()+"이 식사("+eatting.foodName+") 시작 ("+eatTime/1000+"분 후 식사 종료)");
+					System.out.println(getName()+"이 식사("+eatting.foodName+" - "+eatting.producer+") 시작 ("+eatTime/1000+"분 후 식사 종료)");
 					eatted.add(eatting.foodName);
 					eatCnt ++;
 					sleep(eatTime); //식사중
-					System.out.println(getName()+"이 식사("+eatting.foodName+") 완료");
+					System.out.println(getName()+"이 식사("+eatting.foodName+" - "+eatting.producer+") 완료");
 					visited.joinConsumer = true; // 음식 다먹으면 다시 대기열에 합류
 					visited.totPrice += eatting.price;
 					pay += eatting.price;
