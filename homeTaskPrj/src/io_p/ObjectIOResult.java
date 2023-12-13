@@ -62,7 +62,6 @@ public class ObjectIOResult {
 			
 			while(fis.available() > 0) {
 				System.out.println((ObjectStud)in.readObject());
-				
 			}
 						
 			

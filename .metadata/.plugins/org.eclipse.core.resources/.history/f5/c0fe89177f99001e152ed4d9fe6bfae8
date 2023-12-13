@@ -1,0 +1,26 @@
+package programmers_p;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Lv1_Running {
+
+	public static void main(String[] args) {
+		String [] player = {"mumu", "soe", "poe", "kai", "mine"};
+		String [] calling = {"kai", "kai", "mine", "mine"};
+		ArrayList<String> al = new ArrayList<>();
+		Map<Integer, String> map = new HashMap<>();
+		for (int i = 0; i < player.length; i++) {
+			al.add(player[i]);
+			map.put(i, player[i]);
+		}
+		
+		
+		System.out.println(map.toString());
+		
+		
+		
+	}
+
+}

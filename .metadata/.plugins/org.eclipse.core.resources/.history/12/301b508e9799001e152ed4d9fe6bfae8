@@ -1,0 +1,30 @@
+package net_p;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+
+public class ServerSocketMain {
+
+	public static void main(String[] args) {
+		ServerSocket server = null;
+		try {
+			server = new ServerSocket(6060);
+			
+			while(true) {
+				
+			}
+			
+		}catch(Exception e) {
+			
+		}finally {
+			try {
+				server.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+			}
+			
+		}
+		
+	}
+
+}

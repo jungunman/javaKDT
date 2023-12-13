@@ -1,0 +1,19 @@
+package net_p;
+
+import java.net.ServerSocket;
+
+public class ServerSocketMain {
+
+	public static void main(String[] args) {
+		try {
+			ServerSocket server = new ServerSocket(6060);
+			
+			
+			
+			
+			
+			server.close();
+		}catch(Exception e) {}
+	}
+
+}
