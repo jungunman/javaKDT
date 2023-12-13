@@ -1,0 +1,33 @@
+package io_p;
+
+class ObjectStud {
+	String name;
+	int [] jum;
+	int tot, avg;
+	
+	
+	
+	public ObjectStud(String name, int ...jum) {
+		this.name = name;
+		this.jum = jum;
+		for (int i : jum) {
+			this.tot += i;
+		}
+		this.avg = tot/jum.length;
+	}
+	
+}
+
+
+
+public class ObjectIOResult {
+
+	public static void main(String[] args) {
+
+		
+		
+		
+		
+	}
+
+}

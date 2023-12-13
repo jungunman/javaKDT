@@ -3,7 +3,43 @@ package io_p;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+
+class AAA{
+	String name;
+	int age;
+	boolean marriage;
+	public AAA(String name, int age, boolean marriage) {
+		super();
+		this.name = name;
+		this.age = age;
+		this.marriage = marriage;
+	}
+	@Override
+	public String toString() {
+		return "AAA [name=" + name + ", age=" + age + ", marriage=" + marriage + "]";
+	}
+		
+}
+
+class BBB implements Serializable{
+	String name;
+	int age;
+	boolean marriage;
+	public BBB(String name, int age, boolean marriage) {
+		super();
+		this.name = name;
+		this.age = age;
+		this.marriage = marriage;
+	}
+	@Override
+	public String toString() {
+		return "BBB [name=" + name + ", age=" + age + ", marriage=" + marriage + "]";
+	}
+		
+}
+
 
 public class ObjectOutMain {
 
@@ -34,6 +70,8 @@ public class ObjectOutMain {
 			oos.writeUTF("아이 너무 아파");
 			oos.writeObject(arr);
 			oos.writeObject(arr2);
+			//oos.writeObject(new AAA("정우성", 53, false));
+			oos.writeObject(new BBB("정좌성", 43, true));
 			oos.close();
 			fos.close();
 			
