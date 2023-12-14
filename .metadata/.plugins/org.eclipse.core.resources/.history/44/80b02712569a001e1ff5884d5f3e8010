@@ -1,0 +1,20 @@
+package net_p;
+
+import java.io.IOException;
+import java.net.Socket;
+
+public class SingleClientMain {
+
+	public static void main(String[] args) {
+		try {
+			Socket socket = new Socket("192.168.200.87", 7777);
+			System.out.println("클라이언트 서버 접속");
+			new SingleSender(socket).start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}

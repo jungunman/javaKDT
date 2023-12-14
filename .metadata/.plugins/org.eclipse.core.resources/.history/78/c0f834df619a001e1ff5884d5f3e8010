@@ -1,0 +1,52 @@
+package net_p;
+
+import java.io.DataOutputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+
+class MultiChatServer{
+	
+	List<DataOutputStream> dos = new ArrayList<DataOutputStream>();
+	
+	
+	public MultiChatServer(Socket socket){
+		dos.add(socket.getOutputStream());
+	}
+	
+	
+	
+}
+
+
+
+public class MultiChatServerMain {
+
+	public static void main(String[] args) {
+		try {
+			ServerSocket server = new ServerSocket(7777);
+			System.out.println("서버입장");
+			
+			
+			while(true) {
+				Socket socket = server.accept();
+				
+			}
+			
+			
+			
+			
+			
+		
+		}catch(Exception e) {
+			
+		}finally {
+			
+		}
+		
+		
+	}
+
+}
