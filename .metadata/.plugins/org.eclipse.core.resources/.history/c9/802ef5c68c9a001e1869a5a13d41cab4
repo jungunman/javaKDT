@@ -1,0 +1,9 @@
+package net_task_p;
+
+public class WoongSender {
+
+	WoongServer ws;
+	
+	
+	
+}

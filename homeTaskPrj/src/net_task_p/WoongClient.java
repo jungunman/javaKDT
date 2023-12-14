@@ -1,0 +1,98 @@
+package net_task_p;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Scanner;
+
+
+class UserSender extends Thread{
+	
+	
+	DataOutputStream dos;
+	
+	public UserSender(Socket socket) {
+		try {
+			dos = new DataOutputStream(socket.getOutputStream());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void run() {
+		Scanner sc = new Scanner(System.in);
+			
+		try {
+			System.out.print("닉네임 입력 : ");
+			String nick =sc.nextLine();
+			dos.writeUTF(nick);
+			while(dos!=null) {
+				String str = sc.nextLine();
+				dos.writeUTF(str);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				dos.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+}
+
+
+class UserReceiver extends Thread{
+	DataInputStream dis;
+	
+	public UserReceiver(Socket socket) {
+		try {
+			dis = new DataInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void run() {
+		try {
+			while(dis!=null) {
+				System.out.println(dis.readUTF());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally {
+			try {
+				dis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+public class WoongClient {
+
+	public static void main(String[] args) {
+		try {
+			
+			Socket socket = new Socket("192.168.56.1", 7777);
+			System.out.println("클라이언트 서버 접속");
+			new UserSender(socket).start();
+			new UserReceiver(socket).start();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+}

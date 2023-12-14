@@ -1,0 +1,20 @@
+package net_task_p;
+
+import java.io.DataOutputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+class WoongServer{
+	Map<String, DataOutputStream> users = new HashMap<>();
+
+	
+}
+
+
+public class ServerMain {
+
+	public static void main(String[] args) {
+		
+	}
+
+}

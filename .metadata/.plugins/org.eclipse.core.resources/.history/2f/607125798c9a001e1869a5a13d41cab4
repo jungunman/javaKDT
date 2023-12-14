@@ -1,0 +1,15 @@
+package net_task_p;
+
+import net_p.RunWoongServer;
+import net_p.WoongServer;
+
+
+public class ServerMain {
+
+	public static void main(String[] args) {
+		RunWoongServer rws = new RunWoongServer();
+		new WoongServer(rws);
+		
+	}
+
+}

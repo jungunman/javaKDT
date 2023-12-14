@@ -2,66 +2,40 @@ package net_p;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class ClientSocketMain {
 
 	public static void main(String[] args) {
-
 		try {
-			Socket sock = new Socket("192.168.200.96",7777);
-			//Socket sock = new Socket("192.168.1.50",7777);
+			//서버접속
+			Socket socket = new Socket("192.168.200.87", 7777);
 			System.out.println("클라이언트 서버 접속 성공");
-			
-			
-			OutputStream os = sock.getOutputStream();
+			OutputStream  os = socket.getOutputStream();
 			DataOutputStream dos = new DataOutputStream(os);
-			InputStream is = sock.getInputStream();
+			InputStream is = socket.getInputStream();
 			DataInputStream dis = new DataInputStream(is);
 			
-			String fileName = dis.readUTF();
-			int size = dis.readInt();
+			dos.writeUTF("자니?");
 			
-			FileOutputStream fos = new FileOutputStream("fff/"+fileName);
+			System.out.println("클라이언트 받음:"+dis.readUTF());
 			
-			int data;
+			dos.writeUTF("왜안자?");
 			
-			byte [] buf = new byte[1024];
-			
-			while((data = dis.read(buf)) != -1){
-				System.out.println("client : " +data);
-				fos.write(buf,0,data);
-			}
-			
-			
-			
-			
-			System.out.println("파일 받음 ");
-			
-			
-			
-			fos.close();
 			dis.close();
+			is.close();
 			dos.close();
 			os.close();
-			sock.close();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
+			
+			socket.close();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
+
 	}
 
 }

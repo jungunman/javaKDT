@@ -1,0 +1,120 @@
+package net_task_p;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+
+class WoongServer{
+	Map<String, DataOutputStream> users = new HashMap<>();
+	public WoongServer() {
+		
+		Collections.synchronizedMap(users);
+	
+		try {
+			ServerSocket server = new ServerSocket(7777);
+			System.out.println("[ 서버 ON ]");
+			
+			while(true) {
+				Socket client = server.accept();
+				new WoongReceiver(client).start();
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	void sendToAll(String msg) {
+		String [] split = null; // 양식 ) 보내는이_귓속말 받을 유저이름_채팅내용
+		boolean whisper = false;
+		if(msg.contains("_")) {
+			split = msg.split("_");
+			whisper = true;
+		}
+		if(whisper) {
+			try {
+				users.get(split[0]).writeUTF(split[1]);
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		for (Map.Entry<String, DataOutputStream> user : users.entrySet()) {
+			try {
+				user.getValue().writeUTF(msg);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	class WoongReceiver extends Thread{
+		String nick;
+		DataOutputStream dos;
+		DataInputStream dis;
+		Scanner sc;//닉네임 및 채팅 입력
+		Socket sock;
+		
+		public WoongReceiver(Socket client) {
+			this.sock = client;
+			try {
+				this.dos = new DataOutputStream(sock.getOutputStream());
+				this.dis = new DataInputStream(sock.getInputStream());
+				this.nick = dis.readUTF();
+				
+				if(joinUser()) {
+					stop();
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		
+		public boolean joinUser() {
+			if(users.containsKey(this.nick)) {
+				return true;
+			}			
+			
+			sendToAll("[ "+this.nick+"님이 입장 하셨습니다 ]");
+			users.put(this.nick, dos);
+			sendToAll("동시 접속자 : "+users.size()+"명");
+			return false;
+		}
+		
+		@Override
+		public void run() {
+			try {
+				while(dis!=null) {
+					sendToAll(this.nick+" : "+dis.readUTF());
+				}
+			}catch(Exception e) {
+				
+			} finally {
+				users.remove(dos);
+				sendToAll(" [ "+this.nick+"퇴장 하셨습니다 ] ");
+				sendToAll("접속자 수 : "+users.size());
+			}
+		}
+	}
+	
+	
+}
+
+public class WoongServerMain {
+
+	public static void main(String[] args) {
+		new WoongServer();
+	}
+
+}
