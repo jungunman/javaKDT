@@ -1,6 +1,0 @@
-package thread_task_p;
-
-public class AfterJoinLimitTimer extends Thread {
-
-
-}

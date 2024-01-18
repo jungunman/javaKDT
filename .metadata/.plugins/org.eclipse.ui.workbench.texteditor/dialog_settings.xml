@@ -6,7 +6,11 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
+		<item key="selection" value="col"/>
 		<list key="findhistory">
+			<item value="col"/>
+			<item value="jsp"/>
+			<item value="decode"/>
 			<item value="player"/>
 		</list>
 		<list key="replacehistory">
