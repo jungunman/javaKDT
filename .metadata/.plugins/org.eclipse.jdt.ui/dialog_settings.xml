@@ -54,6 +54,7 @@
 		<item key="patterns" value="*"/>
 		<item key="updateSimilarElements" value="false"/>
 		<item key="updateSimilarElementsMatchStrategy" value="1"/>
+<<<<<<< HEAD
 	</section>
 	<section name="org.eclipse.jdt.internal.ui.text.QuickOutline">
 		<item key="GoIntoTopLevelTypeAction.isChecked" value="false"/>
@@ -67,5 +68,7 @@
 	</section>
 	<section name="ClasspathContainerSelectionPage">
 		<item key="index" value="7"/>
+=======
+>>>>>>> 911505ae83c809c0701cc2c6e8cf068a4e18c452
 	</section>
 </section>

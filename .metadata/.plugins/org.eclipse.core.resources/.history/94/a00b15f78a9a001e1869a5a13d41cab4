@@ -1,0 +1,59 @@
+package net_p;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.Scanner;
+
+
+class WoongSender extends Thread{
+	DataOutputStream dos;
+	Scanner sc;
+	
+	public WoongSender(Socket socket) {
+		try {
+			dos = new DataOutputStream(socket.getOutputStream());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void run() {
+		this.sc = new Scanner(System.in);
+		
+		try {
+			while(dos!=null) {
+				String str = sc.nextLine();
+				dos.writeUTF(str);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				dos.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+
+
+public class WoongClient {
+
+	public static void main(String[] args) {
+		try {
+			Socket socket = new Socket("192.168.56.1", 7777);
+			System.out.println("클라이언트 서버 접속");
+			new WoongSender(socket).start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}

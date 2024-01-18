@@ -1,0 +1,28 @@
+package net_task_p;
+
+import java.io.DataOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+
+
+
+public class WoongServer{
+	Map<String, DataOutputStream> users = new HashMap<>();
+	ServerSocket server;
+	Socket client;
+	
+	public WoongServer(RunWoongServer runServer) {
+		this.server = runServer.server;
+		try {
+			while(true) {
+				this.client = server.accept();
+				new WoongReciver(client, this).start();
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

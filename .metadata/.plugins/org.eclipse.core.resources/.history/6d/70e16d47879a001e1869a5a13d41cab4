@@ -1,0 +1,90 @@
+package net_task_p;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+
+class RunWoongServer{
+	ServerSocket server;
+	
+	public RunWoongServer() {
+		try {
+			this.server = new ServerSocket(7777);
+			System.out.println("[ 서버 ON ]");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+class WoongServer{
+	Map<String, DataOutputStream> users = new HashMap<>();
+	ServerSocket server;
+	Socket client;
+	
+	public WoongServer(RunWoongServer runServer) {
+		this.server = runServer.server;
+		try {
+			while(true) {
+				this.client = server.accept();
+				new WoongReciver(client, this).start();
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+class WoongReciver extends Thread{
+	String nick;
+	DataOutputStream dos; //유저의 writer
+	DataInputStream dis; //유저의 reader
+	WoongServer ws; // 서버 주소 저장
+	Scanner sc;//닉네임 및 채팅 입력
+	
+	public WoongReciver(Socket client , WoongServer ws) {
+		this.sc = new Scanner(System.in);
+		System.out.print("닉네임 입력 : ");
+		try {
+			this.ws = ws;
+			this.nick = sc.nextLine();
+			this.dos = new DataOutputStream(client.getOutputStream());
+			this.dis = new DataInputStream(client.getInputStream());
+			
+			if(joinUser()) {
+				throw new Exception("닉네임 중복으로 입장 할 수 없음 ㅎㅅㅎ");
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public boolean joinUser() {
+		if(ws.users.containsKey(nick)) {
+			return true;
+		}				
+		ws.users.put(nick, dos);
+		System.out.println(" 입장 완료 ");
+		
+		return false;
+	}
+	
+}
+
+
+public class ServerMain {
+
+	public static void main(String[] args) {
+		
+		new WoongServer(new RunWoongServer());
+		
+	}
+
+}

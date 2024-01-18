@@ -1,0 +1,16 @@
+package net_task_p;
+
+import java.net.ServerSocket;
+
+public class RunWoongServer{
+	ServerSocket server;
+	
+	public RunWoongServer() {
+		try {
+			this.server = new ServerSocket(7777);
+			System.out.println("[ 서버 ON ]");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

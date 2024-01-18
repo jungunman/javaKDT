@@ -1,0 +1,71 @@
+package net_task_p;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+
+class RunWoongServer{
+	ServerSocket server;
+	
+	public RunWoongServer() {
+		try {
+			this.server = new ServerSocket(7777);
+			System.out.println("[ 서버 ON ]");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+class WoongServer{
+	Map<String, DataOutputStream> users = new HashMap<>();
+	ServerSocket server;
+	Socket client;
+	
+	public WoongServer(ServerSocket server) {
+		try {
+			while(true) {
+				this.client = server.accept();
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+class WoongReciver{
+	String nick;
+	DataOutputStream dos;
+	DataInputStream dis;
+	Scanner sc;
+	
+	public WoongReciver(Socket client , WoongServer ws) {
+		this.sc = new Scanner(System.in);
+		System.out.print("닉네임 입력 : ");
+		try {
+			this.nick = "["+client.getInetAddress()+"]";
+			this.dos = new DataOutputStream(client.getOutputStream());
+			this.dis = new DataInputStream(client.getInputStream());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+}
+
+
+public class ServerMain {
+
+	public static void main(String[] args) {
+		
+		
+	}
+
+}

@@ -4,15 +4,20 @@
     <fullyQualifiedTypeName name="thread_task_p.Foods"/>
     <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="thread_task_p.AfterJoinLimitTimer"/>
+<<<<<<< HEAD
     <fullyQualifiedTypeName name="java.util.HashMap"/>
     <fullyQualifiedTypeName name="java.util.Map.Entry"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="java.util.Stack"/>
     <fullyQualifiedTypeName name="java.net.Socket"/>
+=======
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.util.Stack"/>
+>>>>>>> 911505ae83c809c0701cc2c6e8cf068a4e18c452
     <fullyQualifiedTypeName name="java.io.OutputStream"/>
-    <fullyQualifiedTypeName name="java.io.DataOutputStream"/>
     <fullyQualifiedTypeName name="java.io.InputStream"/>
     <fullyQualifiedTypeName name="java.io.DataInputStream"/>
+<<<<<<< HEAD
     <fullyQualifiedTypeName name="java.net.DatagramSocket"/>
     <fullyQualifiedTypeName name="net_p.UDPSingleClient"/>
     <fullyQualifiedTypeName name="net_p.UDPSingleServerSender"/>
@@ -52,4 +57,23 @@
     <fullyQualifiedTypeName name="org.apache.catalina.Service"/>
     <fullyQualifiedTypeName name="java.security.Provider.Service"/>
     <fullyQualifiedTypeName name="jakarta.servlet.annotation.WebServlet"/>
+=======
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="java.net.ServerSocket"/>
+    <fullyQualifiedTypeName name="java.net.Socket"/>
+    <fullyQualifiedTypeName name="java.io.DataOutputStream"/>
+    <fullyQualifiedTypeName name="java.util.Scanner"/>
+    <fullyQualifiedTypeName name="net_task_p.WoongReciver"/>
+    <fullyQualifiedTypeName name="java.lang.Thread"/>
+    <fullyQualifiedTypeName name="java.util.Map.Entry"/>
+    <fullyQualifiedTypeName name="net_p.WoongClient"/>
+    <fullyQualifiedTypeName name="net_task_p.RunWoongServer"/>
+    <fullyQualifiedTypeName name="net_p.WoongReciver"/>
+    <fullyQualifiedTypeName name="net_p.WoongServer"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="net_task_p.WoongServer"/>
+    <fullyQualifiedTypeName name="net_p.RunWoongServer"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
+    <fullyQualifiedTypeName name="java.lang.Exception"/>
+>>>>>>> 911505ae83c809c0701cc2c6e8cf068a4e18c452
 </qualifiedTypeNameHistroy>

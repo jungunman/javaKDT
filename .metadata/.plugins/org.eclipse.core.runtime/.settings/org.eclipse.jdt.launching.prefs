@@ -1,2 +1,6 @@
 eclipse.preferences.version=1
+<<<<<<< HEAD
 org.eclipse.jdt.launching.PREF_VM_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<vmSettings defaultVM\="57,org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType13,1705381970426" defaultVMConnector\="">\r\n    <vmType id\="org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType">\r\n        <vm id\="1705381970426" name\="jre" path\="D\:\\woong\\Sony\\eclipse\\plugins\\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.9.v20231028-0858\\jre"/>\r\n        <vm id\="D\:\\woong\\jdk-17.0.9" name\="jdk-17.0.9" path\="D\:\\woong\\jdk-17.0.9"/>\r\n    </vmType>\r\n</vmSettings>\r\n
+=======
+org.eclipse.jdt.launching.PREF_VM_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<vmSettings defaultVM\="57,org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType13,1702559142540" defaultVMConnector\="">\r\n    <vmType id\="org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType">\r\n        <vm id\="1702559142540" name\="jre" path\="C\:\\Users\\Lucas\\Desktop\\eclipse-jee-2023-09-R-win32-x86_64\\eclipse\\plugins\\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.8.v20230831-1047\\jre"/>\r\n        <vm id\="C\:\\woong\\jdk-17.0.9" name\="jdk-17.0.9" path\="C\:\\woong\\jdk-17.0.9"/>\r\n    </vmType>\r\n</vmSettings>\r\n
+>>>>>>> 911505ae83c809c0701cc2c6e8cf068a4e18c452
